@@ -4,6 +4,8 @@
 
 #define PI 3.1415
 #define Z_COORDINATE 0.0
+#define RADIO_INT 1.0
+#define RADIO_EXT 0.7
 
 void printTriangle(double initialAngle)
 {
@@ -12,8 +14,8 @@ void printTriangle(double initialAngle)
     double phaseAngle = 2 * PI / 3.0;
     for (int i = 0; i < 4; i++)
     {
-        glVertex3f(cos(initialAngle + i * phaseAngle), sin(initialAngle + i * phaseAngle), Z_COORDINATE);
-        glVertex3f(0.7 * cos(initialAngle + i * phaseAngle), 0.7 * sin(initialAngle + i * phaseAngle), Z_COORDINATE);
+        glVertex3f(RADIO_INT * cos(initialAngle + i * phaseAngle), RADIO_INT * sin(initialAngle + i * phaseAngle), Z_COORDINATE);
+        glVertex3f(RADIO_EXT * cos(initialAngle + i * phaseAngle), RADIO_EXT * sin(initialAngle + i * phaseAngle), Z_COORDINATE);
     }
     glEnd();
 }

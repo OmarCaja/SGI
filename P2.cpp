@@ -8,9 +8,12 @@
 #define RADIO_EXT 0.7
 
 static GLuint triangle;
+static GLuint start;
 
 void drawTriangle()
 {
+    glBegin(GL_TRIANGLE_STRIP);
+
     double initialAngle = PI / 6.0;
     double phaseAngle = 2 * PI / 3.0;
     for (int i = 0; i < 4; i++)
@@ -18,19 +21,8 @@ void drawTriangle()
         glVertex3f(RADIO_INT * cos(initialAngle + i * phaseAngle), RADIO_INT * sin(initialAngle + i * phaseAngle), Z_COORDINATE);
         glVertex3f(RADIO_EXT * cos(initialAngle + i * phaseAngle), RADIO_EXT * sin(initialAngle + i * phaseAngle), Z_COORDINATE);
     }
-}
 
-void init()
-{
-    triangle = glGenLists(1);
-
-    glNewList(triangle, GL_COMPILE);
-
-    glBegin(GL_TRIANGLE_STRIP);
-    drawTriangle();
     glEnd();
-
-    glEndList();
 }
 
 void drawStart()
@@ -41,6 +33,20 @@ void drawStart()
     glRotatef(180, 0, 0, 1);
     glCallList(triangle);
     glPushMatrix();
+    glPopMatrix();
+}
+
+void init()
+{
+    triangle = glGenLists(1);
+    glNewList(triangle, GL_COMPILE);
+    drawTriangle();
+    glEndList();
+
+    start = glGenLists(2);
+    glNewList(start, GL_COMPILE);
+    drawStart();
+    glEndList();
 }
 
 void display(void)
@@ -48,7 +54,7 @@ void display(void)
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    drawStart();
+    glCallList(start);
     glFlush();
 }
 

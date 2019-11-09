@@ -38,6 +38,8 @@ void drawStart()
 
 void init()
 {
+    glClearColor(1.0, 1.0, 1.0, 1.0);
+
     triangle = glGenLists(1);
     glNewList(triangle, GL_COMPILE);
     drawTriangle();

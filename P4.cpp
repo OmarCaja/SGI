@@ -9,7 +9,6 @@
 
 static GLuint triangle;
 static GLuint start;
-static GLuint twoStarts;
 
 void drawTriangle()
 {
@@ -29,7 +28,6 @@ void drawTriangle()
 void drawStart()
 {
     glPushMatrix();
-    glColor3f(0.0, 0.0, 0.3);
     glCallList(triangle);
 
     glRotatef(180, 0, 0, 1);
@@ -37,22 +35,23 @@ void drawStart()
     glPopMatrix();
 }
 
-void drawTwoStarts()
+void drawSixStarts()
 {
-    glPushMatrix();
-    glRotatef(-15, 0, 0, 1);
-    glCallList(start);
-    glPushMatrix();
-    glScalef(0.4, 0.4, Z_COORDINATE);
-    glRotatef(30, 0, 0, 1);
-    glCallList(start);
-    glPopMatrix();
-    glPopMatrix();
+
+    for (int i = 0; i < 360/60; i++)
+    {
+        glPushMatrix();
+        glColor3f(0, 0.1 * i, 0.1 * i);
+        glRotatef(30 * i, 0, 1, 0);
+        glCallList(start);
+        glPopMatrix();
+    }
 }
 
 void init()
 {
     glClearColor(1.0, 1.0, 1.0, 1.0);
+    glEnable(GL_DEPTH_TEST);
 
     triangle = glGenLists(1);
     glNewList(triangle, GL_COMPILE);
@@ -63,61 +62,44 @@ void init()
     glNewList(start, GL_COMPILE);
     drawStart();
     glEndList();
-
-    twoStarts = glGenLists(3);
-    glNewList(twoStarts, GL_COMPILE);
-    drawTwoStarts();
-    glEndList();
-}
-
-void drawStarts()
-{
-    glPushMatrix();
-    glScalef(0.5, 0.5, Z_COORDINATE);
-
-    glPushMatrix();
-    glTranslatef(1.0, 1.0, Z_COORDINATE);
-    glCallList(twoStarts);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(1.0, -1.0, Z_COORDINATE);
-    glRotatef(30, 0, 0, 1);
-    glCallList(twoStarts);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(-1.0, 1.0, Z_COORDINATE);
-    glRotatef(30, 0, 0, 1);
-    glCallList(twoStarts);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(-1.0, -1.0, Z_COORDINATE);
-    glCallList(twoStarts);
-    glPopMatrix();
-
-    glPopMatrix();
 }
 
 void display(void)
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    drawStarts();
+
+    gluLookAt(2, 2, 2, 0, 0, 0, 0, 1, 0);
+
+    glColor3f(0.3, 0, 0);
+    glutWireSphere(1.0, 20, 20);
+
+    drawSixStarts();
+
     glFlush();
+}
+
+void reshape(GLint w, GLint h)
+{
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    float razon = (float)w / h;
+    gluPerspective(45, razon, 0.1, 100);
 }
 
 int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(400, 400);
     glutInitWindowPosition(100, 100);
-    glutCreateWindow("SGI P3");
+    glutCreateWindow("SGI P4");
     init();
     glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
     glutMainLoop();
     return 0;
 }

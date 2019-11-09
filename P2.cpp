@@ -27,12 +27,12 @@ void drawTriangle()
 
 void drawStart()
 {
+    glPushMatrix();
     glColor3f(0.0, 0.0, 0.3);
     glCallList(triangle);
 
     glRotatef(180, 0, 0, 1);
     glCallList(triangle);
-    glPushMatrix();
     glPopMatrix();
 }
 

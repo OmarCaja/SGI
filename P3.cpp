@@ -113,7 +113,7 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_SINGLE);
     glutInitWindowSize(400, 400);
     glutInitWindowPosition(100, 100);
-    glutCreateWindow("SGI P2");
+    glutCreateWindow("SGI P3");
     init();
     glutDisplayFunc(display);
     glutMainLoop();

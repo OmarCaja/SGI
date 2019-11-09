@@ -9,6 +9,7 @@
 
 static GLuint triangle;
 static GLuint start;
+static GLuint twoStarts;
 
 void drawTriangle()
 {
@@ -27,12 +28,25 @@ void drawTriangle()
 
 void drawStart()
 {
+    glPushMatrix();
     glColor3f(0.0, 0.0, 0.3);
     glCallList(triangle);
 
     glRotatef(180, 0, 0, 1);
     glCallList(triangle);
+    glPopMatrix();
+}
+
+void drawTwoStarts()
+{
     glPushMatrix();
+    glRotatef(-15, 0, 0, 1);
+    glCallList(start);
+    glPushMatrix();
+    glScalef(0.4, 0.4, Z_COORDINATE);
+    glRotatef(30, 0, 0, 1);
+    glCallList(start);
+    glPopMatrix();
     glPopMatrix();
 }
 
@@ -47,6 +61,41 @@ void init()
     glNewList(start, GL_COMPILE);
     drawStart();
     glEndList();
+
+    twoStarts = glGenLists(3);
+    glNewList(twoStarts, GL_COMPILE);
+    drawTwoStarts();
+    glEndList();
+}
+
+void drawStarts()
+{
+    glPushMatrix();
+    glScalef(0.5, 0.5, Z_COORDINATE);
+
+    glPushMatrix();
+    glTranslatef(1.0, 1.0, Z_COORDINATE);
+    glCallList(twoStarts);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(1.0, -1.0, Z_COORDINATE);
+    glRotatef(30, 0, 0, 1);
+    glCallList(twoStarts);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-1.0, 1.0, Z_COORDINATE);
+    glRotatef(30, 0, 0, 1);
+    glCallList(twoStarts);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-1.0, -1.0, Z_COORDINATE);
+    glCallList(twoStarts);
+    glPopMatrix();
+
+    glPopMatrix();
 }
 
 void display(void)
@@ -54,7 +103,7 @@ void display(void)
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glCallList(start);
+    drawStarts();
     glFlush();
 }
 

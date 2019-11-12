@@ -9,6 +9,9 @@
 
 static GLuint triangle;
 static GLuint start;
+static GLuint sixStarts;
+
+static int startAngle = 0;
 
 void drawTriangle()
 {
@@ -61,6 +64,11 @@ void init()
     start = glGenLists(2);
     glNewList(start, GL_COMPILE);
     drawStart();
+    glEndList();
+
+    sixStarts = glGenLists(3);
+    glNewList(sixStarts, GL_COMPILE);
+    drawSixStarts();
     glEndList();
 }
 
@@ -122,7 +130,11 @@ void display(void)
 
     gluLookAt(0, 0, 3, 0, 0, 0, 0, 1, 0);
 
-    drawSixStarts();
+    glPushMatrix();
+    glRotatef(startAngle, 0, 1, 0);
+    glCallList(sixStarts);
+    glPopMatrix();
+
     drawHours();
     drawHour();
     drawMinute();
@@ -141,6 +153,13 @@ void reshape(GLint w, GLint h)
     gluPerspective(45, razon, 0.1, 100);
 }
 
+void onIdle()
+{
+    startAngle = startAngle + 3;
+
+    glutPostRedisplay();
+}
+
 int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
@@ -151,6 +170,7 @@ int main(int argc, char **argv)
     init();
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
+    glutIdleFunc(onIdle);
     glutMainLoop();
     return 0;
 }

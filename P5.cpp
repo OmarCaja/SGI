@@ -4,8 +4,8 @@
 
 #define PI 3.1415
 #define Z_COORDINATE 0.0
-#define RADIO_INT 1.0
-#define RADIO_EXT 0.7
+#define RADIO_INT 0.7
+#define RADIO_EXT 1.0
 
 static GLuint triangle;
 static GLuint start;
@@ -77,7 +77,6 @@ void drawHours()
         glPopMatrix();
     }
 
-    glColor3f(0.3, 0.3, 0.3);
     for (int i = 1; i < 12; i = i + 2)
     {
         glColor3f(0, 0.1 * i, 0.1 * i);
@@ -90,10 +89,28 @@ void drawHours()
 
 void drawHour()
 {
+    glColor3f(0, 0.1, 0.1);
     glPushMatrix();
-    glTranslatef(0, 0.3, 0);
-    glRotatef(-90, 1, 0, 0);
-    glutWireCone(0.1, 0.3, 20, 20);
+    glTranslatef(0, 1, 0);
+    glutSolidSphere(0.1, 20, 20);
+    glPopMatrix();
+}
+
+void drawMinute()
+{
+    glColor3f(0, 0.3, 0.3);
+    glPushMatrix();
+    glTranslatef(0, 0.7, 0);
+    glutSolidSphere(0.075, 20, 20);
+    glPopMatrix();
+}
+
+void drawSecond()
+{
+    glColor3f(0, 0.6, 0.6);
+    glPushMatrix();
+    glTranslatef(0, 0.4, 0);
+    glutSolidSphere(0.05, 20, 20);
     glPopMatrix();
 }
 
@@ -103,11 +120,13 @@ void display(void)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    gluLookAt(1, 1, 2, 0, 0, 0, 0, 1, 0);
+    gluLookAt(0, 0, 3, 0, 0, 0, 0, 1, 0);
 
     drawSixStarts();
     drawHours();
     drawHour();
+    drawMinute();
+    drawSecond();
 
     glFlush();
 }

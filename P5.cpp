@@ -88,6 +88,15 @@ void drawHours()
     }
 }
 
+void drawHour()
+{
+    glPushMatrix();
+    glTranslatef(0, 0.3, 0);
+    glRotatef(-90, 1, 0, 0);
+    glutWireCone(0.1, 0.3, 20, 20);
+    glPopMatrix();
+}
+
 void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -98,6 +107,7 @@ void display(void)
 
     drawSixStarts();
     drawHours();
+    drawHour();
 
     glFlush();
 }

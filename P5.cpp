@@ -37,11 +37,10 @@ void drawStart()
 
 void drawSixStarts()
 {
-
     for (int i = 0; i < 6; i++)
     {
         glPushMatrix();
-        glScalef(0.4, 0.4, 0.4);
+        glScalef(0.2, 0.2, 0.2);
         glColor3f(0, 0.1 * i, 0.1 * i);
         glRotatef(30 * i, 0, 1, 0);
         glCallList(start);
@@ -65,7 +64,7 @@ void init()
     glEndList();
 }
 
-void drawTriangles()
+void drawHours()
 {
     double initialAngle = PI / 6.0;
 
@@ -97,11 +96,8 @@ void display(void)
 
     gluLookAt(1, 1, 2, 0, 0, 0, 0, 1, 0);
 
-    glColor3f(0.3, 0.3, 0.3);
-    glutWireSphere(1, 1, 20);
-
     drawSixStarts();
-    drawTriangles();
+    drawHours();
 
     glFlush();
 }

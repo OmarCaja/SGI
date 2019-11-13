@@ -74,12 +74,6 @@ void init()
     minuteAngle = (PI / 2) - (ltm->tm_min * 6.0 * PI / 180.0);
     hourAngle = (PI / 2) - (hour * PI / 6.0);
 
-    printf("%d", ltm->tm_hour);
-    printf("-");
-    printf("%d", ltm->tm_min);
-    printf("-");
-    printf("%d", ltm->tm_sec);
-
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glEnable(GL_DEPTH_TEST);
 

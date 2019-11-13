@@ -11,8 +11,9 @@ static GLuint triangle;
 static GLuint start;
 static GLuint sixStarts;
 
-static int startAngle = 0;
-static int initalSeconds = 0;
+float startAngle = 0;
+float secondAngle = 0;
+int secondsCounter = 0;
 
 void drawTriangle()
 {
@@ -118,7 +119,7 @@ void drawSecond()
 {
     glColor3f(0, 0.6, 0.6);
     glPushMatrix();
-    glTranslatef(0, 0.4, 0);
+    glTranslatef(0.4 * cos(secondAngle), 0.4 * sin(secondAngle), Z_COORDINATE);
     glutSolidSphere(0.05, 20, 20);
     glPopMatrix();
 }
@@ -139,6 +140,7 @@ void display(void)
     drawHours();
     drawHour();
     drawMinute();
+
     drawSecond();
 
     glutSwapBuffers();
@@ -165,7 +167,11 @@ void onTimer(int value)
 
 void onTimerSeconds(int value)
 {
-    initalSeconds = initalSeconds + value;
+    secondsCounter = secondsCounter + value;
+
+    secondAngle = secondAngle - (6.0 * PI / 180.0);
+
+    glutTimerFunc(1000, onTimerSeconds, 1);
 
     glutPostRedisplay();
 }

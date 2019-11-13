@@ -70,9 +70,15 @@ void init()
         hour = hour - 12;
     }
 
-    secondAngle = (ltm->tm_sec * 6.0 * PI / 180.0) - (PI / 2);
-    minuteAngle = (ltm->tm_min * 6.0 * PI / 180.0) - (PI / 2);
-    hourAngle = (hour * PI / 6.0) - (PI / 2);
+    secondAngle = (PI / 2) - (ltm->tm_sec * 6.0 * PI / 180.0);
+    minuteAngle = (PI / 2) - (ltm->tm_min * 6.0 * PI / 180.0);
+    hourAngle = (PI / 2) - (hour * PI / 6.0);
+
+    printf("%d", ltm->tm_hour);
+    printf("-");
+    printf("%d", ltm->tm_min);
+    printf("-");
+    printf("%d", ltm->tm_sec);
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glEnable(GL_DEPTH_TEST);
@@ -110,7 +116,7 @@ void drawHours()
     {
         glColor3f(0, 0.1 * i, 0.1 * i);
         glPushMatrix();
-        glTranslatef((RADIO_EXT -0.1) * cos(initialAngle * i), (RADIO_EXT - 0.1) * sin(initialAngle * i), Z_COORDINATE);
+        glTranslatef((RADIO_EXT - 0.1) * cos(initialAngle * i), (RADIO_EXT - 0.1) * sin(initialAngle * i), Z_COORDINATE);
         glutSolidSphere(0.05, 20, 20);
         glPopMatrix();
     }
@@ -151,7 +157,7 @@ void display(void)
 
     gluLookAt(CAMERA_X, CAMERA_Y, CAMERA_Z, 0, 0, 0, 0, 1, 0);
 
-    glutWireSphere(0.9, 1 , 20);
+    glutWireSphere(0.9, 1, 20);
 
     glPushMatrix();
     glRotatef(phaseAngle, 0, 1, 0);
@@ -173,10 +179,10 @@ void reshape(GLint w, GLint h)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-	float aspect = (float)w / h;
-	float distance = sqrt(pow(CAMERA_X, 2) + pow(CAMERA_Y, 2) + pow(CAMERA_Z, 2));
-	float fovy = 2.0 * asin(1 / distance) * 180.0 / PI;
-	gluPerspective(fovy, aspect, 0.1, 100);
+    float aspect = (float)w / h;
+    float distance = sqrt(pow(CAMERA_X, 2) + pow(CAMERA_Y, 2) + pow(CAMERA_Z, 2));
+    float fovy = 2.0 * asin(1 / distance) * 180.0 / PI;
+    gluPerspective(fovy, aspect, 0.1, 100);
 }
 
 void onTimer(int value)

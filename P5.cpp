@@ -12,6 +12,7 @@ static GLuint start;
 static GLuint sixStarts;
 
 static int startAngle = 0;
+static int initalSeconds = 0;
 
 void drawTriangle()
 {
@@ -153,9 +154,18 @@ void reshape(GLint w, GLint h)
     gluPerspective(45, razon, 0.1, 100);
 }
 
-void onIdle()
+void onTimer(int value)
 {
-    startAngle = startAngle + 3;
+    startAngle = startAngle + value;
+
+    glutTimerFunc(10, onTimer, 3);
+
+    glutPostRedisplay();
+}
+
+void onTimerSeconds(int value)
+{
+    initalSeconds = initalSeconds + value;
 
     glutPostRedisplay();
 }
@@ -170,7 +180,8 @@ int main(int argc, char **argv)
     init();
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
-    glutIdleFunc(onIdle);
+    glutTimerFunc(1000, onTimerSeconds, 1);
+    glutTimerFunc(10, onTimer, 3);
     glutMainLoop();
     return 0;
 }

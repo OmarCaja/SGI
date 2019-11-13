@@ -7,6 +7,9 @@
 #define Z_COORDINATE 0.0
 #define RADIO_INT 0.7
 #define RADIO_EXT 1.0
+#define CAMERA_X 1
+#define CAMERA_Y 0
+#define CAMERA_Z 3
 
 static GLuint triangle;
 static GLuint start;
@@ -150,7 +153,7 @@ void display(void)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    gluLookAt(0, 0, 3, 0, 0, 0, 0, 1, 0);
+    gluLookAt(CAMERA_X, CAMERA_Y, CAMERA_Z, 0, 0, 0, 0, 1, 0);
 
     glPushMatrix();
     glRotatef(phaseAngle, 0, 1, 0);
@@ -172,8 +175,10 @@ void reshape(GLint w, GLint h)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    float razon = (float)w / h;
-    gluPerspective(45, razon, 0.1, 100);
+	float aspect = (float)w / h;
+	float distance = sqrt(pow(CAMERA_X, 2) + pow(CAMERA_Y, 2) + pow(CAMERA_Z, 2));
+	float fovy = 2.0 * asin(1 / distance) * 180.0 / PI;
+	gluPerspective(fovy, aspect, 0.1, 100);
 }
 
 void onTimer(int value)
@@ -197,7 +202,6 @@ void onTimerSeconds(int value)
     }
     if (secondsCounter % 3600 == 0)
     {
-        secondsCounter = 0;
         hourAngle = hourAngle - (PI / 6.0);
     }
 

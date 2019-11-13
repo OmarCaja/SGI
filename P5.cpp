@@ -16,7 +16,7 @@ static GLuint start;
 static GLuint sixStarts;
 
 float phaseAngle = 0;
-float secondAngle = 0;
+float secondAngle = PI / 2;
 float minuteAngle = 0;
 float hourAngle = 0;
 int secondsCounter = 0;
@@ -70,7 +70,6 @@ void init()
         hour = hour - 12;
     }
 
-    secondAngle = (PI / 2) - (ltm->tm_sec * 6.0 * PI / 180.0);
     minuteAngle = (PI / 2) - (ltm->tm_min * 6.0 * PI / 180.0);
     hourAngle = (PI / 2) - (hour * PI / 6.0);
 

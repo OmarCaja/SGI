@@ -140,7 +140,7 @@ void display(void)
     drawMinute();
     drawSecond();
 
-    glFlush();
+    glutSwapBuffers();
 }
 
 void reshape(GLint w, GLint h)
@@ -163,7 +163,7 @@ void onIdle()
 int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(400, 400);
     glutInitWindowPosition(100, 100);
     glutCreateWindow("Reloj 3D");

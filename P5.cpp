@@ -1,6 +1,7 @@
 #include <GL/glut.h>
 #include <stdio.h>
 #include <cmath>
+#include <ctime>
 
 #define PI 3.1415
 #define Z_COORDINATE 0.0
@@ -11,9 +12,10 @@ static GLuint triangle;
 static GLuint start;
 static GLuint sixStarts;
 
-float startAngle = 0;
-float secondAngle = PI / 2;
+float phaseAngle = 0;
+float secondAngle = 0;
 float minuteAngle = 0;
+float hourAngle = 0;
 int secondsCounter = 0;
 
 void drawTriangle()
@@ -56,6 +58,23 @@ void drawSixStarts()
 
 void init()
 {
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+
+    int hour = ltm->tm_hour;
+    if (hour > 12)
+    {
+        hour = hour - 12;
+    }
+
+    secondAngle = (ltm->tm_sec * 6.0 * PI / 180.0) - (PI / 2);
+    minuteAngle = (ltm->tm_min * 6.0 * PI / 180.0) - (PI / 2);
+    hourAngle = (hour * PI / 6.0) - (PI / 2);
+
+    printf("%d", ltm->tm_hour);
+    printf("%d", ltm->tm_min);
+    printf("%d", ltm->tm_sec);
+
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glEnable(GL_DEPTH_TEST);
 
@@ -102,7 +121,7 @@ void drawHour()
 {
     glColor3f(0, 0.1, 0.1);
     glPushMatrix();
-    glTranslatef(0, 1, 0);
+    glTranslatef(RADIO_EXT * cos(hourAngle), RADIO_EXT * sin(hourAngle), Z_COORDINATE);
     glutSolidSphere(0.1, 20, 20);
     glPopMatrix();
 }
@@ -134,7 +153,7 @@ void display(void)
     gluLookAt(0, 0, 3, 0, 0, 0, 0, 1, 0);
 
     glPushMatrix();
-    glRotatef(startAngle, 0, 1, 0);
+    glRotatef(phaseAngle, 0, 1, 0);
     glCallList(sixStarts);
     glPopMatrix();
 
@@ -159,7 +178,7 @@ void reshape(GLint w, GLint h)
 
 void onTimer(int value)
 {
-    startAngle = startAngle + value;
+    phaseAngle = phaseAngle + value;
 
     glutTimerFunc(10, onTimer, 3);
 
@@ -175,6 +194,11 @@ void onTimerSeconds(int value)
     if (secondsCounter % 60 == 0)
     {
         minuteAngle = minuteAngle - (6.0 * PI / 180.0);
+    }
+    if (secondsCounter % 3600 == 0)
+    {
+        secondsCounter = 0;
+        hourAngle = hourAngle - (PI / 6.0);
     }
 
     glutTimerFunc(1000, onTimerSeconds, 1);

@@ -8,7 +8,7 @@
 #define RADIO_INT 0.7
 #define RADIO_EXT 1.0
 #define CAMERA_X 1
-#define CAMERA_Y 0
+#define CAMERA_Y 1
 #define CAMERA_Z 3
 
 static GLuint triangle;
@@ -105,7 +105,7 @@ void drawHours()
     {
         glColor3f(0, 0.1 * i, 0.1 * i);
         glPushMatrix();
-        glTranslatef(RADIO_EXT * cos(initialAngle * i), RADIO_EXT * sin(initialAngle * i), Z_COORDINATE);
+        glTranslatef((RADIO_EXT - 0.1) * cos(initialAngle * i), (RADIO_EXT - 0.1) * sin(initialAngle * i), Z_COORDINATE);
         glutSolidCube(0.05);
         glPopMatrix();
     }
@@ -114,7 +114,7 @@ void drawHours()
     {
         glColor3f(0, 0.1 * i, 0.1 * i);
         glPushMatrix();
-        glTranslatef(RADIO_EXT * cos(initialAngle * i), RADIO_EXT * sin(initialAngle * i), Z_COORDINATE);
+        glTranslatef((RADIO_EXT -0.1) * cos(initialAngle * i), (RADIO_EXT - 0.1) * sin(initialAngle * i), Z_COORDINATE);
         glutSolidSphere(0.05, 20, 20);
         glPopMatrix();
     }
@@ -124,7 +124,7 @@ void drawHour()
 {
     glColor3f(0, 0.1, 0.1);
     glPushMatrix();
-    glTranslatef(RADIO_EXT * cos(hourAngle), RADIO_EXT * sin(hourAngle), Z_COORDINATE);
+    glTranslatef((RADIO_EXT - 0.1) * cos(hourAngle), (RADIO_EXT - 0.1) * sin(hourAngle), Z_COORDINATE);
     glutSolidSphere(0.1, 20, 20);
     glPopMatrix();
 }
@@ -133,7 +133,7 @@ void drawMinute()
 {
     glColor3f(0, 0.3, 0.3);
     glPushMatrix();
-    glTranslatef(0.7 * cos(minuteAngle), 0.7 * sin(minuteAngle), Z_COORDINATE);
+    glTranslatef(0.6 * cos(minuteAngle), 0.6 * sin(minuteAngle), Z_COORDINATE);
     glutSolidSphere(0.075, 20, 20);
     glPopMatrix();
 }
@@ -142,7 +142,7 @@ void drawSecond()
 {
     glColor3f(0, 0.6, 0.6);
     glPushMatrix();
-    glTranslatef(0.4 * cos(secondAngle), 0.4 * sin(secondAngle), Z_COORDINATE);
+    glTranslatef(0.3 * cos(secondAngle), 0.3 * sin(secondAngle), Z_COORDINATE);
     glutSolidSphere(0.05, 20, 20);
     glPopMatrix();
 }
@@ -154,6 +154,8 @@ void display(void)
     glLoadIdentity();
 
     gluLookAt(CAMERA_X, CAMERA_Y, CAMERA_Z, 0, 0, 0, 0, 1, 0);
+
+    glutWireSphere(0.9, 1 , 20);
 
     glPushMatrix();
     glRotatef(phaseAngle, 0, 1, 0);

@@ -11,25 +11,25 @@ GLfloat v0[3] = { 0, 0, 5 }, v1[3] = { 1000, 0, 5 }, v2[3] = { 1000, 0, -5 }, v3
 float velocity = 0;
 static const float velocityInc = 0.1;
 
-GLuint road, sky;
+static GLuint road, desert;
 
 void init()
 // Inicializaciones
 {
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 
-	//Carga de texturas
+	// Texturas (carga de texturas)
 	glGenTextures(1, &road);
 	glBindTexture(GL_TEXTURE_2D, road);
 	loadImageFile((char*)"carretera.jpg");
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-	glGenTextures(1, &sky);
-	glBindTexture(GL_TEXTURE_2D, sky);
+	glGenTextures(1, &desert);
+	glBindTexture(GL_TEXTURE_2D, desert);
 	loadImageFile((char*)"desierto.jpg");
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	
 	// Configurar el motor de render
 	glEnable(GL_DEPTH_TEST);
@@ -41,7 +41,7 @@ void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glBindTexture(GL_TEXTURE_2D, sky);
+	glBindTexture(GL_TEXTURE_2D, desert);
 	texturarFondo();
 
 	// Seleccion de la matriz modelo-vista
@@ -51,9 +51,24 @@ void display()
 	// Situamos y orientamos la camara
 	gluLookAt(camera_pos_x, camera_pos_y, camera_pos_z, camera_view_x, camera_view_y, camera_view_z, 0, 1, 0);
 
-	glColor3f(0, 0, 0);
-	glPolygonMode(GL_FRONT, GL_LINE);
-	quad(v0, v1, v2, v3, 1000, 10);
+	glBindTexture(GL_TEXTURE_2D, road);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+	glBegin(GL_POLYGON);
+
+	glTexCoord2f(1, 0);
+	glVertex3f(0, 0, 5);
+
+	glTexCoord2f(1, 100);
+	glVertex3f(2000, 0, 5);
+
+	glTexCoord2f(0, 100);
+	glVertex3f(2000, 0, -5);
+
+	glTexCoord2f(0, 0);
+	glVertex3f(0, 0, -5);
+
+	glEnd();
 
 	glutSwapBuffers();
 }
